@@ -1,0 +1,74 @@
+{
+  "name": "sendproof/symfony",
+  "description": "Sendproof for Symfony: an in-app API workbench with rollback previews and observed sends for Doctrine.",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "keywords": [
+    "symfony",
+    "doctrine",
+    "sendproof",
+    "openapi",
+    "api",
+    "preview",
+    "api-testing",
+    "workbench",
+    "swagger",
+    "rollback"
+  ],
+  "homepage": "https://github.com/mprync/sendproof",
+  "authors": [
+    {
+      "name": "Sendproof contributors",
+      "homepage": "https://github.com/mprync/sendproof"
+    }
+  ],
+  "support": {
+    "source": "https://github.com/mprync/sendproof",
+    "issues": "https://github.com/mprync/sendproof/issues"
+  },
+  "require": {
+    "php": "^8.2",
+    "doctrine/dbal": "^4.0",
+    "doctrine/doctrine-bundle": "^2.13|^3.0",
+    "doctrine/orm": "^3.0",
+    "symfony/config": "^7.0|^8.0",
+    "symfony/dependency-injection": "^7.0|^8.0",
+    "symfony/framework-bundle": "^7.0|^8.0",
+    "symfony/http-foundation": "^7.0|^8.0",
+    "symfony/http-kernel": "^7.0|^8.0",
+    "symfony/routing": "^7.0|^8.0",
+    "sendproof/core": "0.1.0-alpha.1"
+  },
+  "suggest": {
+    "symfony/mailer": "Captures and suppresses outgoing mail during a preview",
+    "symfony/security-bundle": "Identity display, trace ownership and workbench authorization",
+    "symfony/monolog-bundle": "Captures log records into previews"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sendproof\\Symfony\\": "src/"
+    }
+  },
+  "archive": {
+    "exclude": [
+      "/vendor",
+      "/tests",
+      "/phpunit.xml",
+      "/.phpunit.result.cache",
+      "/.phpunit.cache",
+      "/composer.lock"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/runtime": true,
+      "php-http/discovery": true
+    },
+    "platform": {
+      "ext-grpc": "1.60.0"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
