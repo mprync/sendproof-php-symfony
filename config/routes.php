@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Sendproof\Core\JourneyFiles;
 use Sendproof\Symfony\Controller\WorkbenchController;
 
 /**
@@ -24,6 +25,8 @@ return static function (RoutingConfigurator $routes): void {
     $routes->add('sendproof_capabilities', '/sendproof/_api/capabilities')->controller([WorkbenchController::class, 'capabilities'])->methods(['GET']);
     $routes->add('sendproof_trace', '/sendproof/_api/traces/{id}')
         ->controller([WorkbenchController::class, 'trace'])->methods(['GET'])->requirements(['id' => '[0-9a-fA-F-]{32,36}']);
+    $routes->add('sendproof_journey', '/sendproof/journeys/{file}')
+        ->controller([WorkbenchController::class, 'journey'])->methods(['GET'])->requirements(['file' => JourneyFiles::ROUTE_FILE]);
     $routes->add('sendproof_asset', '/sendproof/{asset}')
         ->controller([WorkbenchController::class, 'asset'])->methods(['GET'])->requirements(['asset' => '.+']);
 };

@@ -8,8 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Psr\Log\LoggerInterface;
 use Sendproof\Core\Capture\Recorder;
 use Sendproof\Core\Contracts\PreviewProvider;
+use Sendproof\Core\JourneyFiles;
+use Sendproof\Core\Journeys\JourneyDocument;
 use Sendproof\Core\Preview\NoSqlProvider;
 use Sendproof\Core\Stores\DataStore;
 use Sendproof\Core\Trace\FileTraceStore;
@@ -25,6 +28,7 @@ use Sendproof\Symfony\Stores\HookedStores;
 final class SendproofManager
 {
     private ?TraceStore $store = null;
+    private ?JourneyFiles $journeys = null;
 
     /**
      * @param array<string,mixed> $settings The processed `sendproof` configuration
@@ -39,6 +43,7 @@ final class SendproofManager
         private readonly ?TokenStorageInterface $tokens = null,
         private readonly ?AuthorizationCheckerInterface $authorization = null,
         private readonly ?HookedStores $stores = null,
+        private readonly ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -46,6 +51,31 @@ final class SendproofManager
     public function enabled(): bool
     {
         return $this->settings['enabled'] === true && in_array($this->environment, $this->settings['environments'], true);
+    }
+
+    /** Registers a definition during kernel boot using the data served at openapi_url. */
+    public function addJourneys(JourneyDocument $definition, array|\stdClass $openApi): void
+    {
+        if ($this->enabled()) {
+            $this->journeyFiles()->addJourneys(
+                $definition,
+                (string) $this->setting('openapi_url'),
+                $openApi,
+                in_array($this->environment, ['dev', 'development'], true),
+                function (string $warning): void {
+                    if ($this->logger !== null) {
+                        $this->logger->warning($warning);
+                    } else {
+                        error_log($warning);
+                    }
+                },
+            );
+        }
+    }
+
+    public function journeyFiles(): JourneyFiles
+    {
+        return $this->journeys ??= new JourneyFiles($this->setting('journeys') ?? []);
     }
 
     /** Why Preview is off in this worker, shown in capabilities and in the 409 a Preview request gets. */

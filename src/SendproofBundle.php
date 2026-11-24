@@ -29,6 +29,16 @@ final class SendproofBundle extends Bundle
         $container->addCompilerPass(new DataStorePass());
     }
 
+    public function boot(): void
+    {
+        if ($this->container?->has('sendproof.journey_provider')) {
+            $manager = $this->container->get('sendproof.journey_manager');
+            if ($manager->enabled()) {
+                $this->container->get('sendproof.journey_provider')($manager);
+            }
+        }
+    }
+
     public function getPath(): string
     {
         return dirname(__DIR__);

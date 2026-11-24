@@ -46,6 +46,7 @@ return static function (ContainerConfigurator $container): void {
             service('security.token_storage')->nullOnInvalid(),
             service('security.authorization_checker')->nullOnInvalid(),
             null, // HookedStores: set by DataStorePass when data stores are configured and enabled
+            service('logger')->nullOnInvalid(),
         ]);
     $services->alias(SendproofManager::class, 'sendproof.manager');
 

@@ -34,6 +34,10 @@ final class SendproofExtension extends Extension
         $container->setParameter('sendproof.safe_procedures', Statements::normalizeProcedures($config['safe_procedures']));
 
         (new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config')))->load('services.php');
+        if ($config['enabled'] && $config['journey_provider'] !== null) {
+            $container->setAlias('sendproof.journey_provider', $config['journey_provider'])->setPublic(true);
+            $container->setAlias('sendproof.journey_manager', 'sendproof.manager')->setPublic(true);
+        }
 
         $provider = $config['provider'];
         if ($provider === 'doctrine') {
