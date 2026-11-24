@@ -37,7 +37,7 @@
     "symfony/http-foundation": "^7.0|^8.0",
     "symfony/http-kernel": "^7.0|^8.0",
     "symfony/routing": "^7.0|^8.0",
-    "sendproof/core": "0.1.0-alpha.2"
+    "sendproof/core": "0.1.0-alpha.3"
   },
   "suggest": {
     "symfony/mailer": "Captures and suppresses outgoing mail during a preview",
